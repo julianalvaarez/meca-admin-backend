@@ -278,7 +278,6 @@ app.put('/actualizar-socio/:dni', async (req, res) => {
     }
 });
 
-
 // Eliminar socio
 app.delete('/eliminar-socio/:dni', async (req, res) => {
     const dni = req.params.dni
@@ -292,7 +291,35 @@ app.delete('/eliminar-socio/:dni', async (req, res) => {
     }
 })
 
+// Endpoint para obtener notas
+app.get("/notas", async (req, res) => {
+    try {
+        const { data, error } = await connection
+            .from("notas")
+            .select("*");
 
+        if (error) throw error;
+        res.status(200).json(data);
+    } catch (err) {
+        res.status(500).json({ message: "Error al obtener notas", error: err.message });
+    }
+});
+
+// Endpoint para guardar o actualizar notas
+app.post("/notas", async (req, res) => {
+    const { actividad, nota } = req.body;
+
+    try {
+        const { data, error } = await connection
+            .from("notas")
+            .upsert({ actividad, nota }, { onConflict: ["actividad"] });
+
+        if (error) throw error;
+        res.status(200).json({ message: "Nota guardada exitosamente", data });
+    } catch (err) {
+        res.status(500).json({ message: "Error al guardar nota", error: err.message });
+    }
+});
 
 
 app.listen(port, () => {
