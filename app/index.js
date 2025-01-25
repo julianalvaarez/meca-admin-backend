@@ -49,7 +49,7 @@ app.get('/socios', async (req, res) => {
             mail,
             telefono,
             fecha_registro,
-            cantidad_reservas,
+            categoria_padel,
             socio_actividades (
                 actividades (
                     nombre_actividad
@@ -111,7 +111,7 @@ app.get('/socios/:dni', async (req, res) => {
             mail,
             telefono,
             fecha_registro,
-            cantidad_reservas,
+            categoria_padel,
             socio_actividades (
                 actividades (
                     nombre_actividad
@@ -158,7 +158,7 @@ app.get('/actividades', async (req, res) => {
                         mail,
                         fecha_nacimiento,
                         telefono,
-                        cantidad_reservas,
+                        categoria_padel,
                         fecha_registro
                     )
                 )
@@ -201,12 +201,12 @@ app.get('/socios-por-mes/:mes', async (req, res) => {
 
 // Crear socio
 app.post('/socios', async (req, res) => {
-    const { nombre, dni, fecha_nacimiento, mail, telefono, cantidad_reservas, idActividades } = req.body;
+    const { nombre, dni, fecha_nacimiento, mail, telefono, categoria_padel, idActividades } = req.body;
     try {
         const { data: socio, error } = await connection
             .from('socios')
             .insert([
-                { nombre, dni, fecha_nacimiento, mail, telefono, cantidad_reservas },
+                { nombre, dni, fecha_nacimiento, mail, telefono, categoria_padel },
             ])
             .select();
 
@@ -236,7 +236,7 @@ app.post('/socios', async (req, res) => {
 // Actualizar socio
 app.put('/actualizar-socio/:dni', async (req, res) => {
     const dni = req.params.dni;
-    const { nombre, fecha_nacimiento, mail, telefono, cantidad_reservas, idActividades, id_socio } = req.body;
+    const { nombre, fecha_nacimiento, mail, telefono, categoria_padel, idActividades, id_socio } = req.body;
     try {
         // Actualizar los datos del socio
         const { error: updateError } = await connection
@@ -246,7 +246,7 @@ app.put('/actualizar-socio/:dni', async (req, res) => {
                 fecha_nacimiento,
                 mail,
                 telefono,
-                cantidad_reservas,
+                categoria_padel,
             })
             .eq('dni', dni);
 
